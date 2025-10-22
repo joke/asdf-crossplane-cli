@@ -2,21 +2,23 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v6.0.0
   hooks:
   - id: check-yaml
   - id: end-of-file-fixer
   - id: trailing-whitespace
-- repo: https://github.com/syntaqx/git-hooks
-  rev: v0.0.17
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.9.0.6
   hooks:
   - id: shellcheck
-  - id: shfmt
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.7.0
+    args: [-x, --source-path=SCRIPTDIR]
+- repo: https://github.com/scop/pre-commit-shfmt
+  rev: v3.7.0-1
   hooks:
-  - id: pretty-format-yaml
-    args:
-    - --autofix
-    - --indent
-    - '2'
+  - id: shfmt
+    args: [-i, '2', -bn, -ci, -sr]
+- repo: https://github.com/adrienverge/yamllint
+  rev: v1.35.1
+  hooks:
+  - id: yamllint
+    args: [--strict]

@@ -7,3 +7,23 @@ https://github.com/crossplane/crossplane-cli[crossplane-cli] plugin for https://
 ```
 asdf plugin-add crossplane-cli https://github.com/joke/asdf-crossplance-cli.git
 ```
+
+== Configuration
+
+=== Customizing the Executable Name
+
+By default, the plugin installs the Crossplane CLI as `crossplane`. You can customize the executable name by setting the `ASDF_CROSSPLANE_EXECUTABLE_NAME` environment variable:
+
+```bash
+# Install as 'crossplane' (default)
+asdf install crossplane-cli latest
+
+# Install as 'kubectl-crossplane' for backward compatibility
+export ASDF_CROSSPLANE_EXECUTABLE_NAME=kubectl-crossplane
+asdf install crossplane-cli latest
+
+# Or set it inline
+ASDF_CROSSPLANE_EXECUTABLE_NAME=kubectl-crossplane asdf install crossplane-cli latest
+```
+
+This is useful for backward compatibility if you have scripts or tools that expect a different executable name.

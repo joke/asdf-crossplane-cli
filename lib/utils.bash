@@ -4,7 +4,9 @@ set -euo pipefail
 
 RELEASES="https://releases.crossplane.io"
 TOOL_NAME="crossplane-cli"
-EXECUTABLE_NAME="kubectl-crossplane"
+# Allow users to override the executable name via environment variable
+# Default is 'crossplane', but can be customized for backward compatibility
+EXECUTABLE_NAME="${ASDF_CROSSPLANE_EXECUTABLE_NAME:-crossplane}"
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
@@ -14,14 +16,14 @@ fail() {
 curl_opts=(-fsSL)
 
 sort_versions() {
-  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
-    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
+  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' \
+    | LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
 list_all_versions() {
-  curl "${curl_opts[@]}" 'https://s3-us-west-2.amazonaws.com/crossplane.releases?delimiter=/&prefix=stable/' |
-    grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' |
-    sed 's/v//g'
+  curl "${curl_opts[@]}" 'https://s3-us-west-2.amazonaws.com/crossplane.releases?delimiter=/&prefix=stable/' \
+    | grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' \
+    | sed 's/v//g'
 }
 
 detect_system() {
